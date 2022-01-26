@@ -12,5 +12,6 @@
 AllCops:
   TargetRubyVersion: 3.0
   TargetRailsVersion: 6.1
+  NewCops: enable
   Exclude:
     - db/schema.rb
