@@ -23,9 +23,9 @@ RSpec.describe Link, type: :model do
   end
 
   describe '#generate_slug' do
-    let(:link) { build(:link) }
-
     subject { link.generate_slug }
+
+    let(:link) { build(:link) }
 
     it { is_expected.to be_present }
   end
