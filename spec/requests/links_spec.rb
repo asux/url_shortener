@@ -34,6 +34,23 @@ RSpec.describe '/links', type: :request do
     {}
   end
 
+
+  describe 'GET /slug' do
+    it 'renders a successful response' do
+      link = create(:link, :with_slug)
+      expect { get "/#{link.slug}", as: :html }.to change{ link.reload.redirects }.by(1)
+      expect(response).to redirect_to(link.url)
+    end
+
+    context 'when slug not found' do
+      it 'renders a not found response' do
+        link = create(:link, :with_slug)
+        get "/wrong", as: :html
+        expect(response).to have_http_status(:not_found)
+      end
+    end
+  end
+
   describe 'GET /index' do
     it 'renders a successful response' do
       Link.create! valid_attributes
@@ -87,7 +104,7 @@ RSpec.describe '/links', type: :request do
   describe 'PATCH /update' do
     context 'with valid parameters' do
       let(:new_attributes) do
-        skip('Add a hash of attributes valid for your model')
+        { url: 'https://github.com', slug: 'github' }
       end
 
       it 'updates the requested link' do
@@ -95,7 +112,7 @@ RSpec.describe '/links', type: :request do
         patch link_url(link),
               params: { link: new_attributes }, headers: valid_headers, as: :json
         link.reload
-        skip('Add assertions for updated state')
+        expect(link.attributes).to include(new_attributes.stringify_keys)
       end
 
       it 'renders a JSON response with the link' do

@@ -3,6 +3,18 @@
 class LinksController < ApplicationController
   before_action :set_link, only: %i[show update destroy]
 
+  # GET /slug
+  def redirect_to_url
+    @link = Link.find_by(slug: params[:slug])
+    if @link.present?
+      @link.increment(:redirects)
+      @link.save
+      redirect_to @link.url
+    else
+      head :not_found
+    end
+  end
+
   # GET /links
   def index
     @links = Link.all

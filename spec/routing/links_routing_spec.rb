@@ -4,6 +4,10 @@ require 'rails_helper'
 
 RSpec.describe LinksController, type: :routing do
   describe 'routing' do
+    it 'routes to #redirect_to_url' do
+      expect(get: '/google').to route_to('links#redirect_to_url', slug: 'google')
+    end
+
     it 'routes to #index' do
       expect(get: '/links').to route_to('links#index')
     end
